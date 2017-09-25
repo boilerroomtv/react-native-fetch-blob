@@ -521,7 +521,7 @@ public class RNFetchBlobReq extends BroadcastReceiver implements Runnable {
                     if(expectedLength > 0) {
                         long actualLength = new File(this.destPath).length();
                         if(actualLength != expectedLength) {
-                            callback.invoke("RNFetchBlob failed to write data to storage : expected " + expectedLength + " bytes but got " + actualLength + " bytes", null);
+                            callback.invoke("FAILED - The network connection was lost.", null);
                         }
                         else {
                             callback.invoke(null, RNFetchBlobConst.RNFB_RESPONSE_PATH, this.destPath);

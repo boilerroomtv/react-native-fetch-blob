@@ -437,7 +437,7 @@ public class RNFetchBlobReq extends BroadcastReceiver implements Runnable {
      */
     private void releaseTaskResource() {
         if(taskTable.containsKey(taskId))
-            taskTable.remove(taskId);
+          taskTable.remove(taskId);
         if(uploadProgressReport.containsKey(taskId))
             uploadProgressReport.remove(taskId);
         if(progressReport.containsKey(taskId))
@@ -515,7 +515,26 @@ public class RNFetchBlobReq extends BroadcastReceiver implements Runnable {
 //                    ignored.printStackTrace();
                 }
                 this.destPath = this.destPath.replace("?append=true", "");
-                callback.invoke(null, RNFetchBlobConst.RNFB_RESPONSE_PATH, this.destPath);
+                try {
+                    long expectedLength = resp.body().contentLength();
+                    // when response contains Content-Length, check if the stream length is correct
+                    if(expectedLength > 0) {
+                        long actualLength = new File(this.destPath).length();
+                        if(actualLength != expectedLength) {
+                            callback.invoke("The network connection was lost.", null);
+                        }
+                        else {
+                            callback.invoke(null, RNFetchBlobConst.RNFB_RESPONSE_PATH, this.destPath);
+                        }
+                    }
+                    else {
+                        callback.invoke(null, RNFetchBlobConst.RNFB_RESPONSE_PATH, this.destPath);
+                    }
+                }
+                catch (Exception err) {
+                    callback.invoke(err.getMessage());
+                    err.printStackTrace();
+                }
                 break;
             default:
                 try {

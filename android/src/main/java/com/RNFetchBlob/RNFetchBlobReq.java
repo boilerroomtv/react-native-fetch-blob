@@ -437,7 +437,6 @@ public class RNFetchBlobReq extends BroadcastReceiver implements Runnable {
      */
     private void releaseTaskResource() {
         if(taskTable.containsKey(taskId))
-          cancelTask(taskId);
           taskTable.remove(taskId);
         if(uploadProgressReport.containsKey(taskId))
             uploadProgressReport.remove(taskId);

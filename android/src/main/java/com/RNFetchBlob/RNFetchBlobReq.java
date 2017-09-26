@@ -521,7 +521,7 @@ public class RNFetchBlobReq extends BroadcastReceiver implements Runnable {
                     if(expectedLength > 0) {
                         long actualLength = new File(this.destPath).length();
                         if(actualLength != expectedLength) {
-                            callback.invoke("The network connection was lost.", null);
+                            callback.invoke("The network connection was lost.", RNFetchBlobConst.RNFB_RESPONSE_PATH, this.destPath);
                         }
                         else {
                             callback.invoke(null, RNFetchBlobConst.RNFB_RESPONSE_PATH, this.destPath);
